@@ -13,7 +13,7 @@ import java.util.List;
 @FeignClient(value = "product-server",fallbackFactory = ProductServiceFallbackFactory.class)
 public interface ProductService {
 
-    //这就是业务层抽象方法使用SpringMVC注解1787387
+    //这就是业务层抽象方法使用SpringMVC注解17873879
     @GetMapping("/product")
     List<Product> getProduct();
 
