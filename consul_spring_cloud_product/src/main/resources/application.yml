@@ -1,0 +1,17 @@
+server:
+  port: 8020
+spring:
+  application:
+    name: product-server
+  cloud:
+    consul:
+      host: localhost    #注册中心的访问地址
+      port: 8500
+      discovery:
+        register: true    #是否需要注册
+        instance-id: ${spring.application.name}-01    #注册实例id必须唯一
+        service-name: ${spring.application.name}      #服务名称
+        port: ${server.port}                          #服务端口
+        prefer-ip-address: true                       #是否使用ip地址注册
+        ip-address: ${spring.cloud.client.ip-address} #服务请求ip
+

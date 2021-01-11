@@ -1,0 +1,27 @@
+server:
+  port: 8005
+  tomcat:
+    max-threads: 11     #降低最大线程数方便模拟高并发
+eureka:
+  client:
+    service-url:
+      defaultZone: http://root:root@eureka2:8762/eureka/,http://root:root@eureka1:8761/eureka/
+    register-with-eureka: true     #不注册到注册中心
+  instance:
+    instance-id: ${spring.cloud.client.ip-address}:${server.port}   #显示ip：port
+    prefer-ip-address: true
+    lease-renewal-interval-in-seconds: 5    #心跳间隔
+    lease-expiration-duration-in-seconds: 15
+spring:
+  application:
+    name: order-server
+product-server:
+  ribbon:
+    NFLoadBalancerRuleClassName: com.netflix.loadbalancer.RandomRule
+ribbon:
+  ConnecTimeout: 5000
+  ReadTimeout: 5000
+#额外开启feign对hystrix的支持
+feign:
+  hystrix:
+    enabled: true

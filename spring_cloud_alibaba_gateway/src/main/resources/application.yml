@@ -1,0 +1,16 @@
+server:
+  port: 10001
+spring:
+  cloud:
+    nacos:
+      discovery:
+        server-addr: 192.168.200.113:8848
+    gateway:
+      routes:
+       - id: service-provider1
+         uri: http://192.168.2.177:10002/
+         predicates:
+          - Path=/consumer/**
+  application:
+    name: service-provider
+#gateway网关

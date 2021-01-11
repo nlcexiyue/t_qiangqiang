@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <meta name="_csrf" th:content="${_csrf.token}" />
+    <!-- 默认标题名称是X-CSRF-TOKEN  -->
+    <meta name="_csrf_header" th:content="${_csrf.headerName}" />
+</head>
+<body>
+main
+</body>
+</html>
