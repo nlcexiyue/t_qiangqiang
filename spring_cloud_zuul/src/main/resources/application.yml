@@ -2,4 +2,27 @@ server:
   port: 8007
 zuul:
   routes:
-    users:
+    product-server:
+      path: /product-server/**
+#      url: http://localhost:8010/product    #url地址路由
+      serviceId: product-server               #注册到eureka后根据服务名称路由
+  prefix: /api
+#  ignored-patterns: /**/product/**           #路由排除，排除包含product的路由，不进行转发
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://root:root@eureka2:8762/eureka/,http://root:root@eureka1:8761/eureka/
+  instance:
+    instance-id: ${spring.cloud.client.ip-address}:${server.port}   #显示ip：port
+    prefer-ip-address: true
+    lease-renewal-interval-in-seconds: 5    #心跳间隔
+    lease-expiration-duration-in-seconds: 15
+spring:
+  application:
+    name: zuul-server
+management:
+  endpoints:
+    web:
+      exposure:
+        include: hystrix.stream
