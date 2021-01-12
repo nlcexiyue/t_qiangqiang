@@ -2,10 +2,12 @@ package com.qiangqiang.filter;
 
 import com.alibaba.csp.sentinel.adapter.gateway.common.rule.GatewayFlowRule;
 import com.alibaba.csp.sentinel.adapter.gateway.common.rule.GatewayRuleManager;
+import com.alibaba.csp.sentinel.adapter.gateway.zuul.fallback.ZuulBlockFallbackManager;
 import com.alibaba.csp.sentinel.adapter.gateway.zuul.filters.SentinelZuulErrorFilter;
 import com.alibaba.csp.sentinel.adapter.gateway.zuul.filters.SentinelZuulPostFilter;
 import com.alibaba.csp.sentinel.adapter.gateway.zuul.filters.SentinelZuulPreFilter;
 import com.netflix.zuul.ZuulFilter;
+import com.qiangqiang.Fallback.MyBlockFallbackProvider;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -35,6 +37,9 @@ public class ZuulConfig {
 
     @PostConstruct
     public void doInit() {
+
+        //加载自定义的限流处理类
+        ZuulBlockFallbackManager.registerProvider(new MyBlockFallbackProvider());
         //加载网关限流规则
         initGatewayRules();
     }

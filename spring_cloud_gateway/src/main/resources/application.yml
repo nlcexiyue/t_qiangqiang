@@ -1,0 +1,12 @@
+server:
+  port: 10001
+spring:
+  cloud:
+    gateway:
+      routes:
+      - id: product-server
+        uri: http://192.168.1.4:8010/
+        predicates:
+        - Path=/product/**
+  application:
+    name: gateway-server
