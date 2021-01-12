@@ -1,12 +1,29 @@
 server:
   port: 8007
 zuul:
+  SendErrorFilter:
+    error:
+      disable: true
   routes:
     product-server:
       path: /product-server/**
 #      url: http://localhost:8010/product    #url地址路由
       serviceId: product-server               #注册到eureka后根据服务名称路由
   prefix: /api
+  #服务限流
+  ratelimit:
+    #开启限流保护
+    enabled: true
+    #限流数据存储方式
+    repository: in_memory
+    #default是全局配置
+    default-policy-list:
+      - limit: 3
+        refresh-interval: 60        #60秒内超过3次请求，服务端就抛出异常，60s后恢复正常请求
+        type:
+          - origin                  #可指定客户端地址粒度
+          - url                     #可指定url粒度
+          - user                    #可指定用户粒度
 #  ignored-patterns: /**/product/**           #路由排除，排除包含product的路由，不进行转发
 
 eureka:
