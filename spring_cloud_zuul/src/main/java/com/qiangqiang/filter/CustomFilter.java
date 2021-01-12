@@ -8,6 +8,9 @@ import org.springframework.stereotype.Component;
 import javax.servlet.http.HttpServletRequest;
 
 
+/**
+ * @author xiyue
+ */
 @Component
 public class CustomFilter extends ZuulFilter {
 

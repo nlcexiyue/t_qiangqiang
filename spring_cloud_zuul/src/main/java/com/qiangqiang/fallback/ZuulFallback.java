@@ -16,12 +16,13 @@ public class ZuulFallback implements FallbackProvider {
 
     /**
      * 返回fallback处理哪个服务，返回的是服务名称
+     * 如果支持所有的服务都快速失败，则返回null或者*即可
      * @return
      */
     @Override
     public String getRoute() {
-        return "product-server";
-    }
+        return "*";
+}
 
     /**
      * 服务容错处理
@@ -34,7 +35,7 @@ public class ZuulFallback implements FallbackProvider {
         return new ClientHttpResponse() {
             @Override
             public HttpStatus getStatusCode() throws IOException {
-                return HttpStatus.OK;
+                return HttpStatus.INTERNAL_SERVER_ERROR;
             }
 
             @Override
