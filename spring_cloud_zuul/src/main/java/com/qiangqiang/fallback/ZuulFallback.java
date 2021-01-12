@@ -25,7 +25,7 @@ public class ZuulFallback implements FallbackProvider {
 
     /**
      * 服务容错处理
-     * @param route 容错服务名称
+     * @param route 容错服务名称1
      * @param cause 服务异常信息
      * @return
      */
