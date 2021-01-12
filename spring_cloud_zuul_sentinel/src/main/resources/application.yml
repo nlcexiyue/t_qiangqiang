@@ -1,0 +1,19 @@
+server:
+  port: 8008
+eureka:
+  client:
+    service-url:
+      defaultZone: http://root:root@eureka2:8762/eureka/,http://root:root@eureka1:8761/eureka/
+  instance:
+    instance-id: ${spring.cloud.client.ip-address}:${server.port}   #显示ip：port
+    prefer-ip-address: true
+    lease-renewal-interval-in-seconds: 5    #心跳间隔
+    lease-expiration-duration-in-seconds: 15
+spring:
+  #不要在控制台中出现zuul网关的流量监控
+  cloud:
+    sentinel:
+      filter:
+        enabled: false
+  application:
+    name: zuul-sentinel-server
