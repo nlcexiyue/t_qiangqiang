@@ -20,8 +20,8 @@ public class OrderController {
     }
 
     @RequestMapping("/orderById")
-    public Order getOrder(Integer id) {
-
+    public Order getOrder(Integer id , String flag) {
+        System.out.println(flag);
         Order order = orderService.getOrder(id);
         return order;
     }

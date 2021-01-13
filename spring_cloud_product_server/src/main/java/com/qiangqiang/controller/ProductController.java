@@ -16,9 +16,9 @@ public class ProductController {
     @Autowired
     private ProductService productService;
 
-    @RequestMapping("/product")
-    public List<Product> getProduct() {
-
+    @RequestMapping("/product/1")
+    public List<Product> getProduct(String flag) {
+        System.out.println(flag);
         List<Product> productList = productService.getProduct();
         return productList;
     }

@@ -3,10 +3,49 @@ server:
 spring:
   cloud:
     gateway:
+#      #开启服务名称转发，
+#      discovery:
+#        locator:
+#          #是否与服务发现组件进行结合，通过serviceId转发到具体服务实例
+#          enabled: true
+#          #是否将服务名称都小写
+#          lower-case-service-id: true
       routes:
       - id: product-server
-        uri: http://192.168.1.4:8010/
+##        uri: http://192.168.2.177:8010/        #通过不使用eureka的方式来路由到url，可以根据服务名称从注册中心动态的回去请求地址
+        uri: lb://product-server                #通过使用eureka的方式动态匹配路由，使用lb协议
         predicates:
-        - Path=/product/**
+#          - Header=X-Request-Id,\d+     #Header匹配的是Header头中的信息，比如这个请求头信息必须包含X-Request-Id，\d+代表正则匹配所有数字
+#        - RemoteAddr=192.168.2.176/0   #RemoteAddr匹配的远程请求地址，/0代表子网掩码
+#          - After=2020-02-02T20:20:20.000+08:00[Asia/Shanghai]    #Datetime是时间匹配断言，After就是在这个时间之后才能被路由
+#          - Method=GET             #Method匹配的是请求方式，比如这里只有Get请求可以被路由
+#          - Query=token,abc.      #Query匹配的带有正则匹配的token参数，.是指任意字符，比如http://192.168.2.177:10001/product/1?token=abc2
+#          - Query=token           #Query匹配只有带有token参数的请求才会被路由，比如http://192.168.2.177:10001/product/1?token=2
+          - Path=/api-gateway/**      #Path匹配对应url的请求，将匹配到的请求追加在url之后，比如http://192.168.2.177:10001/product/1
+        filters:
+#          - SetPath=/product/{segment}      #重写路径过滤器，比如会将http://192.168.2.177:10001/api/product/1，重写为http://192.168.2.177:10001/product/1来进行请求
+#          - StripPrefix=2     #剥离匹配过滤器，2表示路径中剥离的个数，比如http://192.168.2.177:10001/api/2/product，剥离为http://192.168.2.177:10001/product
+          # 将 /1 重写为 /product/1
+#          - PrefixPath=/product   #重写url时，注意上面的path拦截，因为直接访问的是http://192.168.2.177:10001/1
+#        filters:
+#          # 将 /api-gateway/product/1 重写为 /product/1   /api-gateway/**需要在路径匹配中写上
+#          - RewritePath=/api-gateway(?<segment>/?.*), $\{segment}
+          # 将 /api-gateway/product/1 重写为 /product/1
+          - RewritePath=/api-gateway(?<segment>/?.*), $\{segment}
+          # 在下游请求中添加 flag=1,product-server服务的/product方法将会接收到flag=1的参数
+#          - AddRequestParameter=flag, 1
+          # 任何情况下，响应的 HTTP 状态都将设置为 404，请求将会返回404状态码
+          - SetStatus=404             # 404 或者对应的枚举 NOT_FOUND
+
   application:
     name: gateway-server
+eureka:
+  client:
+    service-url:
+      defaultZone: http://root:root@eureka2:8762/eureka/,http://root:root@eureka1:8761/eureka/
+    register-with-eureka: true          #是否要把自己注册到eureka
+  instance:
+    instance-id: ${spring.cloud.client.ip-address}:${server.port}   #显示ip：port
+    prefer-ip-address: true
+    lease-renewal-interval-in-seconds: 5    #心跳间隔
+    lease-expiration-duration-in-seconds: 15
