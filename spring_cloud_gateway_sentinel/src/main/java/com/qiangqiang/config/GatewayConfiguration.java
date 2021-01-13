@@ -80,7 +80,9 @@ public class GatewayConfiguration {
     public void doInit() {
         // 加载网关限流规则
         initGatewayRules();
+        //自定义异常处理
         initBlockHandler();
+
     }
 
     /**
@@ -101,7 +103,10 @@ public class GatewayConfiguration {
                 .setIntervalSec(60)); // 统计时间窗口，单位是秒，默认是 1 秒
         // 加载网关限流规则
         GatewayRuleManager.loadRules(rules);
+
+        //限流分组策略
         initCustomizedApis();
+
     }
 
     /**
