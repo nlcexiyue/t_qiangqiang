@@ -3,6 +3,9 @@ package com.qiangqiang.filter;
 import org.springframework.cloud.gateway.filter.GatewayFilterChain;
 import org.springframework.cloud.gateway.filter.GlobalFilter;
 import org.springframework.core.Ordered;
+import org.springframework.core.io.buffer.DataBuffer;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.server.reactive.ServerHttpResponse;
 import org.springframework.stereotype.Component;
 import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
@@ -28,8 +31,25 @@ public class CustomGlobalFilter implements GlobalFilter, Ordered {
     @Override
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
         //可以通过exchange获取header头信息的协议token
-        String token = exchange.getRequest().getHeaders().getFirst("token");
-        System.out.println("获取请求头中的令牌：" + token);
+//        String token = exchange.getRequest().getHeaders().getFirst("token");
+//        System.out.println("获取请求头中的令牌：" + token);
+//        return chain.filter(exchange);
+        String token = exchange.getRequest().getQueryParams().getFirst("token");
+        // 业务逻辑处理
+        if (null == token) {
+            ServerHttpResponse response = exchange.getResponse();
+            // 响应类型
+            response.getHeaders().add("Content-Type", "application/json; charset=utf-8");
+            // 响应状态码，HTTP 401 错误代表用户没有访问权限
+            response.setStatusCode(HttpStatus.UNAUTHORIZED);
+            // 响应内容
+            String message = "{\"message\":\"" + HttpStatus.UNAUTHORIZED.getReasonPhrase() + "\"}";
+            DataBuffer buffer = response.bufferFactory().wrap(message.getBytes());
+            // 请求结束，不在继续向下请求
+            return response.writeWith(Mono.just(buffer));
+        }
+        // 使用 token 进行身份验证
+
         return chain.filter(exchange);
     }
 

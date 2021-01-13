@@ -1,0 +1,30 @@
+server:
+  port: 10003
+eureka:
+  client:
+    service-url:
+      defaultZone: http://root:root@eureka2:8762/eureka/,http://root:root@eureka1:8761/eureka/
+  instance:
+    instance-id: ${spring.cloud.client.ip-address}:${server.port}   #显示ip：port
+    prefer-ip-address: true
+    lease-renewal-interval-in-seconds: 5    #心跳间隔
+    lease-expiration-duration-in-seconds: 15
+spring:
+  cloud:
+    sentinel:
+      filter:
+        enabled: false
+    gateway:
+      discovery:
+        locator:
+          #是否与服务发现组件进行结合，通过serviceId转发到具体服务实例
+          enabled: true
+          #是否将服务名称都小写
+          lower-case-service-id: true
+      routes:
+      - id: product-server           # 路由 ID，唯一
+        uri: lb://product-server     # lb:// 根据服务名称从注册中心获取服务请求地址
+        predicates:                   # 断言（判断条件）
+        # 匹配对应 URI 的请求，将匹配到的请求追加在目标 URI 之后
+        - Path=/product/**
+

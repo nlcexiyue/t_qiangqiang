@@ -9,9 +9,9 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.qiangqiang</groupId>
-    <artifactId>spring_cloud_gateway</artifactId>
+    <artifactId>spring_cloud_gateway_sentinel</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>spring_cloud_gateway</name>
+    <name>spring_cloud_gateway_sentinel</name>
     <description>Demo project for Spring Boot</description>
 
     <properties>
@@ -38,28 +38,35 @@
             </dependency>
         </dependencies>
     </dependencyManagement>
+
     <dependencies>
 
-
-
-
-        <!--注册到注册中心的服务就用client-->
         <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
         </dependency>
 
+        <dependency>
+            <groupId>com.alibaba.csp</groupId>
+            <artifactId>sentinel-spring-cloud-gateway-adapter</artifactId>
+        </dependency>
 
-        <!--gateway网关-->
         <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-gateway</artifactId>
         </dependency>
+        <!--<dependency>-->
+            <!--<groupId>com.alibaba.cloud</groupId>-->
+            <!--<artifactId>spring-cloud-starter-alibaba-sentinel</artifactId>-->
+        <!--</dependency>-->
+        <!--<dependency>-->
+            <!--<groupId>com.alibaba.cloud</groupId>-->
+            <!--<artifactId>spring-cloud-alibaba-sentinel-gateway</artifactId>-->
+        <!--</dependency>-->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter</artifactId>
         </dependency>
-
 
         <dependency>
             <groupId>org.springframework.boot</groupId>

@@ -9,14 +9,15 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.qiangqiang</groupId>
-    <artifactId>spring_cloud_gateway</artifactId>
+    <artifactId>spring_cloud_gateway_redis</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>spring_cloud_gateway</name>
+    <name>spring_cloud_gateway_redis</name>
     <description>Demo project for Spring Boot</description>
 
     <properties>
         <java.version>1.8</java.version>
     </properties>
+
     <dependencyManagement>
         <dependencies>
             <!--springcloudalibaba-->
@@ -41,7 +42,16 @@
     <dependencies>
 
 
-
+        <!-- spring data redis reactive 依赖 -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-redis-reactive</artifactId>
+        </dependency>
+        <!-- commons-pool2 对象池依赖 -->
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-pool2</artifactId>
+        </dependency>
 
         <!--注册到注册中心的服务就用client-->
         <dependency>
