@@ -51,7 +51,7 @@ public class Server {
                     int len = 0;
                     while((len = channel.read(byteBuffer))> 0){
                         byteBuffer.flip();
-                        System.out.println(new String(byteBuffer.array(),0,len));
+                        System.out.println(new String(byteBuffer.array(),0,byteBuffer.remaining()));
                         byteBuffer.clear();
                     }
 
