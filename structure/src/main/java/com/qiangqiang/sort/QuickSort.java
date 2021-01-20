@@ -5,19 +5,19 @@ import java.util.Random;
 public class QuickSort {
 
     public static void main(String[] args) {
-        Integer[] arr = new Integer[9000000];
-        for (int i = 0; i < 9000000; i++) {
+        Integer[] arr = new Integer[9];
+        for (int i = 0; i < 9; i++) {
             Random random = new Random();
-            arr[i] = random.nextInt(99909900);
+            arr[i] = random.nextInt(9);
         }
         long l1 = System.currentTimeMillis();
         sort(arr);
         long l2 = System.currentTimeMillis();
         long l = l2 - l1;
         System.out.println("耗费:" + l + "毫秒");
-        for (int i : arr) {
-            System.out.print(i + ",");
-        }
+//        for (int i : arr) {
+//            System.out.print(i + ",");
+//        }
 
 
     }

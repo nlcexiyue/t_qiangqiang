@@ -7,13 +7,78 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.net.InetSocketAddress;
+import java.net.Socket;
 import java.nio.ByteBuffer;
-import java.nio.channels.FileChannel;
+import java.nio.channels.*;
+import java.nio.channels.spi.AbstractSelectableChannel;
 
 /**
  *  通道的测试类
  */
 public class ChannelTest {
+
+
+    @Test
+    public void test05() throws IOException {
+        ServerSocketChannel serverSocketChannel = ServerSocketChannel.open();
+        serverSocketChannel.socket().bind(new InetSocketAddress(9000));
+        //设置为非阻塞模式
+        serverSocketChannel.configureBlocking(false);
+        //注册选择器
+        Selector selector = Selector.open();
+        serverSocketChannel.register(selector,SelectionKey.OP_ACCEPT);
+
+
+        SocketChannel socketChannel = SocketChannel.open();
+
+
+
+
+
+
+    }
+
+
+
+
+    /**
+     * transferTo快速复制通道
+     */
+    @Test
+    public void transferToChannel() throws Exception {
+        //1.构建两个通道
+        FileInputStream fileInputStream = new FileInputStream("data.txt");
+        FileOutputStream fileOutputStream = new FileOutputStream("data3.txt");
+        FileChannel fileInputStreamChannel = fileInputStream.getChannel();
+        FileChannel fileOutputStreamChannel = fileOutputStream.getChannel();
+        fileInputStreamChannel.transferTo(fileInputStreamChannel.position(),fileInputStreamChannel.size(),fileOutputStreamChannel);
+        System.out.println("文件复制完成");
+
+    }
+
+
+
+    /**
+     * transferFrom快速复制通道
+     * @throws Exception
+     */
+    @Test
+    public void transferFromChannel() throws Exception {
+        //1.构建两个通道
+        FileInputStream fileInputStream = new FileInputStream("data.txt");
+        FileOutputStream fileOutputStream = new FileOutputStream("data2.txt");
+        FileChannel fileInputStreamChannel = fileInputStream.getChannel();
+        FileChannel fileOutputStreamChannel = fileOutputStream.getChannel();
+
+        //from(里面),表示从里面获取通道信息
+        fileOutputStreamChannel.transferFrom(fileInputStreamChannel,fileInputStreamChannel.position(),fileInputStreamChannel.size());
+        System.out.println("文件复制成功");
+
+    }
+
+
+
     @Test
     public void copy() throws Exception {
         FileInputStream fileInputStream = new FileInputStream("data.txt");
