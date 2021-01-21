@@ -1,5 +1,9 @@
-package com.qiangqiang.lock;
+package com.qiangqiang.Lock;
 
+import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.concurrent.atomic.AtomicStampedReference;
@@ -20,34 +24,61 @@ public class AtomicStampedReferenceTest {
     public static AtomicStampedReference<Integer> atomicStampedReference = new AtomicStampedReference<>(100,0);
 
     public static AtomicInteger atomicInteger = new AtomicInteger(100);
-
+    private static final Object PRESENT = new Object();
     public static void main(String[] args) {
 
 
-        new Thread( () ->{
-            int stamp1 = atomicStampedReference.getStamp();
-            System.out.println("时间戳:"+stamp1);
+
+
+        List<Object> list = Collections.synchronizedList(new ArrayList<>());
+        ArrayList<Object> objects = new ArrayList<>();
+        Map<String, String> map = new ConcurrentHashMap<>();
+
+
+        for (int i = 0; i < 20; i++) {
+            new Thread(() ->{
+                map.put(UUID.randomUUID().toString().substring(0,5),UUID.randomUUID().toString().substring(0,5));
+                System.out.println(map);
+            }).start();
+        }
+
+
+//        Set<String> set = new HashSet<>();
+//        Set<String> set = Collections.synchronizedSet(new HashSet<>());
+//        Set<String> set = new CopyOnWriteArraySet<>();
+
+
+        CopyOnWriteArrayList copyOnWriteArrayList = new CopyOnWriteArrayList();
+
+
+//        new Thread( () ->{
+//            int stamp1 = atomicStampedReference.getStamp();
+//            System.out.println("时间戳:"+stamp1);
+//
+//
+//
+//            atomicStampedReference.compareAndSet(100,101,
+//                    atomicStampedReference.getStamp(),atomicStampedReference.getStamp()+1);
+//
+//            Integer reference = atomicStampedReference.getReference();
+//            System.out.println("引用值:" + reference);
+//
+//            int stamp = atomicStampedReference.getStamp();
+//            System.out.println("时间戳:"+stamp);
+//
+//        }).start();
+
+
+//        new Thread( () ->{
+//            atomicInteger.compareAndSet(100,1001);
+//            System.out.println("原子类int: " + atomicInteger.intValue());
+//
+//
+//
+//        }).start();
 
 
 
-            atomicStampedReference.compareAndSet(100,101,atomicStampedReference.getStamp(),atomicStampedReference.getStamp()+1);
-
-            Integer reference = atomicStampedReference.getReference();
-            System.out.println("引用值:" + reference);
-
-            int stamp = atomicStampedReference.getStamp();
-            System.out.println("时间戳:"+stamp);
-
-        }).start();
-
-
-        new Thread( () ->{
-            atomicInteger.compareAndSet(100,1001);
-            System.out.println("原子类int: " + atomicInteger.intValue());
-
-
-
-        }).start();
 
 
 
@@ -57,16 +88,13 @@ public class AtomicStampedReferenceTest {
 
 
 
-
-
-
-        atomicReference.set("hello");
-
-        boolean b = atomicReference.compareAndSet("hello", "hello1");
-        System.out.println(b);
-
-        String s = atomicReference.get();
-        System.out.println(s);
+//        atomicReference.set("hello");
+//
+//        boolean b = atomicReference.compareAndSet("hello", "hello1");
+//        System.out.println(b);
+//
+//        String s = atomicReference.get();
+//        System.out.println(s);
 
 
     }
