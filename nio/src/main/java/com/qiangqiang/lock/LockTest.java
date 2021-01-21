@@ -28,6 +28,20 @@ public class LockTest {
     public static void main(String[] args) throws InterruptedException {
 
         ReentrantReadWriteLock reentrantReadWriteLock = new ReentrantReadWriteLock();
+        ReentrantReadWriteLock.ReadLock readLock = reentrantReadWriteLock.readLock();
+        readLock.lock();
+
+        System.out.println("111");
+
+        readLock.unlock();
+
+
+        Thread.yield();
+
+
+
+
+
 
 
         LongAdder longAdder = new LongAdder();
@@ -66,6 +80,10 @@ public class LockTest {
 
             }).start();
         }
+
+
+
+
 
 
 
