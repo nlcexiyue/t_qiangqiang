@@ -32,7 +32,7 @@ public class GoodController {
             Boolean flag = stringRedisTemplate.opsForValue().setIfAbsent(REDIS_LOCK, value,10L, TimeUnit.SECONDS);
 
             if (!flag) {
-                return "强锁失败";
+                return "强锁失败1";
             }
             //看看库存的数量够不够
             String result = stringRedisTemplate.opsForValue().get("goods:001");
