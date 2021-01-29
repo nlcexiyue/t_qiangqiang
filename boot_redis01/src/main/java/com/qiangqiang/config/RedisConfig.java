@@ -1,5 +1,7 @@
 package com.qiangqiang.config;
 
+import org.redisson.Redisson;
+import org.redisson.config.Config;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.cache.RedisCacheConfiguration;
@@ -44,4 +46,15 @@ public class RedisConfig {
                 .serializeValuesWith(RedisSerializationContext.SerializationPair.fromSerializer(new GenericJackson2JsonRedisSerializer()));     // 设置CacheManager的值序列化方式为json序列化，可加入@Class属性
         return RedisCacheManager.builder(redisConnectionFactory).cacheDefaults(redisCacheConfiguration).build();     // 设置默认的cache组件
     }
+
+    @Bean
+    public Redisson redisson(){
+        Config config = new Config();
+        config.useClusterServers().addNodeAddress("redis://192.168.214.129:6379");
+
+        return (Redisson) Redisson.create(config);
+    }
+
+
+
 }

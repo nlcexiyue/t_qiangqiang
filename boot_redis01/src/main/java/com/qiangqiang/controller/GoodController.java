@@ -1,5 +1,7 @@
 package com.qiangqiang.controller;
 
+import org.redisson.Redisson;
+import org.redisson.api.RLock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.StringRedisTemplate;
@@ -17,6 +19,9 @@ public class GoodController {
     @Autowired
     private StringRedisTemplate stringRedisTemplate;
 
+    @Autowired
+    private Redisson redisson;
+
 
     @Value("${server.port}")
     public String serverPort;
@@ -25,15 +30,11 @@ public class GoodController {
     public String buy_goods(){
 
         String s = UUID.randomUUID().toString().replaceAll("-", "");
-
+        RLock redissonLock = redisson.getLock(REDIS_LOCK);
         String value =  s;
         try {
-            //加redis分布式锁
-            Boolean flag = stringRedisTemplate.opsForValue().setIfAbsent(REDIS_LOCK, value,10L, TimeUnit.SECONDS);
+            redissonLock.lock(20,TimeUnit.SECONDS);
 
-            if (!flag) {
-                return "强锁失败1";
-            }
             //看看库存的数量够不够
             String result = stringRedisTemplate.opsForValue().get("goods:001");
             int goodNumber = result == null ? 0 : Integer.parseInt(result);
@@ -50,8 +51,16 @@ public class GoodController {
                 return "意外发生";
             }
         } finally {
-            //解分布式锁
-            stringRedisTemplate.delete(REDIS_LOCK);
+
+
+            //如果redissonLock是锁定状态
+            if(redissonLock.isLocked()){
+                //判断锁持有者是否是当前线程
+                if(redissonLock.isHeldByCurrentThread()){
+                    redissonLock.unlock();
+                }
+            }
+
         }
 
     }
