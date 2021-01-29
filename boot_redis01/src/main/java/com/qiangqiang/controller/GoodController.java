@@ -12,7 +12,7 @@ import java.util.concurrent.TimeUnit;
 @RestController
 public class GoodController {
 
-    public static final String REDIS_LOCK = "lock";
+    public static final String REDIS_LOCK = "LOCK[1]";
 
     @Autowired
     private StringRedisTemplate stringRedisTemplate;
@@ -24,7 +24,9 @@ public class GoodController {
     @GetMapping("buy_goods")
     public String buy_goods(){
 
-        String value = UUID.randomUUID().toString() + Thread.currentThread().getName();
+        String s = UUID.randomUUID().toString().replaceAll("-", "");
+
+        String value =  s;
         try {
             //加redis分布式锁
             Boolean flag = stringRedisTemplate.opsForValue().setIfAbsent(REDIS_LOCK, value,10L, TimeUnit.SECONDS);

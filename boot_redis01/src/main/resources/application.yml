@@ -1,7 +1,7 @@
 spring:
   redis:
     timeout: 10000        # 连接超时时间
-    host: 192.168.200.102  # Redis服务器地址
+    host: 192.168.214.129  # Redis服务器地址
     port: 6379            # Redis服务器端口
     password:         # Redis服务器密码
     database: 0           # 选择哪个库，默认0库

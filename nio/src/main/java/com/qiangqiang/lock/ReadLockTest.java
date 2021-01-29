@@ -16,63 +16,58 @@ public class ReadLockTest {
     static  int a = 1;
     public static void main(String[] args) throws InterruptedException {
 
+        System.out.println(65536 & 65535);
+
 
 
 
         ReentrantReadWriteLock reentrantReadWriteLock = new ReentrantReadWriteLock();
         ReentrantReadWriteLock.ReadLock readLock = reentrantReadWriteLock.readLock();
 
+        ReentrantReadWriteLock.WriteLock writeLock = reentrantReadWriteLock.writeLock();
 
+        new Thread( () ->{
 
-        for (int i = 0; i < 100; i++) {
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            readLock.lock();
+            try {
+                Thread.sleep(100000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            readLock.unlock();
+        }).start();
 
-            new Thread( () ->{
+        new Thread( () ->{
 
-                readLock.lock();
+            readLock.lock();
+            System.out.println("阻塞住了");
 
-                a++;
+            try {
+                Thread.sleep(100000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            readLock.unlock();
+        }).start();
 
-                System.out.println(a);
-
-//                try {
-//                    Thread.sleep(1000);
-//                } catch (InterruptedException e) {
-//                    e.printStackTrace();
-//                }
-
-                readLock.unlock();
-
-            }).start();
-        }
-
-        for (int i = 0; i < 10000; i++) {
-            a++;
-
-        }
-
-        Thread.sleep(1000);
-        System.out.println("最后的a :" + a);
-
-
-
-//        Object o = new Object();
-//        for (int i = 0; i < 10; i++) {
+//        new Thread( () ->{
 //
-//            new Thread( () ->{
+//            writeLock.lock();
+//            System.out.println("阻塞住了");
 //
-//                synchronized (o){
-//                    System.out.println("111");
-//
-//                    try {
-//                        Thread.sleep(10000);
-//                    } catch (InterruptedException e) {
-//                        e.printStackTrace();
-//                    }
-//                }
-//
-//
-//            }).start();
-//        }
+//            try {
+//                Thread.sleep(100000);
+//            } catch (InterruptedException e) {
+//                e.printStackTrace();
+//            }
+//            writeLock.unlock();
+//        }).start();
+
 
 
 
